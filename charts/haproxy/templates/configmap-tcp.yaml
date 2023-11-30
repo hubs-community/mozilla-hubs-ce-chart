@@ -1,0 +1,14 @@
+{{- if .Values.configTCP.enabled }}
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: {{ include "haproxy.fullname" . }}-tcp-config
+  labels:
+    {{- include "haproxy.labels" . | nindent 4 }}
+data:
+  5349:
+    {{ .Release.Namespace }}/coturn:5349
+
+
+{{- end}}

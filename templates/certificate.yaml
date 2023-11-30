@@ -1,0 +1,51 @@
+{{ if .Values.certs.enabled }}
+# cert-{{ .Values.global.domain }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cert-{{ .Values.global.domain }}
+spec:
+  secretName: cert-{{ .Values.global.domain }}
+  issuerRef:
+    name: letsencrypt-staging
+  commonName: {{ .Values.global.domain }}
+  dnsNames:
+    - www.{{ .Values.global.domain }}
+    # - stream.{{ .Values.global.domain }}
+    # - assets.{{ .Values.global.domain }}
+    # - cors.{{ .Values.global.domain }}
+---
+# cert-assets.{{ .Values.global.domain }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cert-assets.{{ .Values.global.domain }}
+spec:
+  secretName: cert-assets.{{ .Values.global.domain }}
+  issuerRef:
+    name: letsencrypt-staging
+  commonName: assets.{{ .Values.global.domain }}
+---
+# cert-stream.{{ .Values.global.domain }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cert-stream.{{ .Values.global.domain }}
+spec:
+  secretName: cert-stream.{{ .Values.global.domain }}
+  issuerRef:
+    name: letsencrypt-staging
+  commonName: stream.{{ .Values.global.domain }}
+---
+# cert-cors.{{ .Values.global.domain }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cert-cors.{{ .Values.global.domain }}
+spec:
+  secretName: cert-cors.{{ .Values.global.domain }}
+  issuerRef:
+    name: letsencrypt-staging
+  commonName: cors.{{ .Values.global.domain }}
+---
+{{ end }}

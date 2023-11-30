@@ -1,0 +1,12 @@
+{{- if .Values.ns.enabled }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.ns.name }}
+  labels:
+    {{- include "hubs-ce.labels" . | nindent 4 }}
+  annotations:
+    {{- include "hubs-ce.annotations" . | nindent 4 }}
+    {{- include ".Values.ns.annotations" . | nindent 4 }}
+
+{{- end }}

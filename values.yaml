@@ -1,0 +1,142 @@
+# Default values for hubs-ce.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+global:
+  domain: &HUBS_DOMAIN "{YOUR_HUBS_DOMAIN}"
+  adminEmail: &ADMINEMAIL "{ADMIN_EMAIL_ADDRESS}"
+
+replicaCount: 1
+# namespace: hcce
+
+image:
+  repository: mozillareality/hubs
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "stable-latest"
+
+annotations:
+  cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0
+    maxSurge: 1
+
+certs:
+  enabled: true
+
+env:
+  - name: turkeyCfg_thumbnail_server
+    value: nearspark.reticulum.io
+  - name: turkeyCfg_tier
+    value: p1
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  {}
+  # fsGroup: 2000
+
+securityContext:
+  {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  annotations:
+    {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+
+resources:
+  {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+configs:
+  enabled: true
+  # The name of the configmap to use
+  name: configs
+  # The key of the configmap to use
+  data:
+    HUB_DOMAIN: *HUBS_DOMAIN
+    ADM_EMAIL: *ADMINEMAIL
+    # Get the following from render_helm.sh
+    DB_USER: "{run render_helm.sh}"
+    DB_PASS: "{run render_helm.sh}"
+    DB_NAME: "{run render_helm.sh}"
+    DB_HOST: "{run render_helm.sh}"
+    DB_HOST_T: "{run render_helm.sh}"
+    PGRST_DB_URI: "{run render_helm.sh}"
+    PSQL: "{run render_helm.sh}"
+    SMTP_SERVER: "{run render_helm.sh}"
+    SMTP_PORT: "{run render_helm.sh}"
+    SMTP_USER: "{run render_helm.sh}"
+    SMTP_PASS: "{run render_helm.sh}"
+    NODE_COOKIE: "{run render_helm.sh}"
+    GUARDIAN_KEY: "{run render_helm.sh}"
+    PHX_KEY: "{run render_helm.sh}"
+    SKETCHFAB_API_KEY: "{run render_helm.sh}"
+    TENOR_API_KEY: "{run render_helm.sh}"
+    PERMS_KEY: "{run render_helm.sh}"
+    PGRST_JWT_SECRET: "{run render_helm.sh}"
+    
+defaultCert:
+  enabled: false
+  name: cert-hcce
+  data:
+    tls.crt: "{run render_helm.sh}"
+    tls.key: "{run render_helm.sh}"
+
+ns:
+  enabled: false
+  name: ns-hcce
+
+cert-manager: #defined by either the name or alias of your dependency in Chart.yaml
+  enabled: true
+  namespace: security

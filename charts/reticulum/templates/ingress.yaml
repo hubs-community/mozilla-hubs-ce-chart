@@ -1,0 +1,114 @@
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := include "reticulum.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1
+{{- else -}}
+apiVersion: extensions/v1beta1
+{{- end }}
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "reticulum.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/ingress.class: haproxy
+    haproxy.org/response-set-header: |
+      access-control-allow-origin "https://{{ .Values.global.domain }}"
+    haproxy.org/path-rewrite: /api-internal(.*) /_drop_
+
+spec:
+  tls:
+    - hosts:
+        - {{ .Values.global.domain }}
+      secretName: cert-{{ .Values.global.domain }}
+    - hosts:
+        - assets.{{ .Values.global.domain }}
+      secretName: cert-assets.{{ .Values.global.domain }}
+    - hosts:
+        - stream.{{ .Values.global.domain }}
+      secretName: cert-stream.{{ .Values.global.domain }}
+    - hosts:
+        - cors.{{ .Values.global.domain }}
+      secretName: cert-cors.{{ .Values.global.domain }}
+  rules:
+    - host: {{ .Values.global.domain }}
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: ret
+              port: 
+                number: 4001
+    - host: assets.{{ .Values.global.domain }}
+      http:
+        paths:
+        - path: /files/
+          pathType: Prefix
+          backend:
+            service:
+              name: ret
+              port: 
+                number: 4001
+        - path: /http
+          pathType: ImplementationSpecific  # haproxy's "Begin with"
+          backend:
+            service:
+              name: ret
+              port: 
+                number: 4001
+        - path: /hubs
+          pathType: Prefix
+          backend:
+            service:
+              name: hubs
+              port: 
+                number: 8080
+        - path: /spoke
+          pathType: Prefix
+          backend:
+            service:
+              name: spoke
+              port: 
+                number: 8080
+    - host: cors.{{ .Values.global.domain }}
+      http:
+        paths:
+        - path: /files/
+          pathType: Prefix
+          backend:
+            service:
+              name: ret
+              port: 
+                number: 4001
+        - path: /http
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: ret
+              port: 
+                number: 4001                  
+        - path: /hubs
+          pathType: Prefix
+          backend:
+            service:
+              name: hubs
+              port: 
+                number: 8080
+        - path: /spoke
+          pathType: Prefix
+          backend:
+            service:
+              name: spoke
+              port: 
+                number: 8080
+        - path: /nearspark
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: nearspark
+              port: 
+                number: 5000
+  {{- end }}

@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "hubs-ce.fullname" . }}
+  labels:
+    {{- include "hubs-ce.labels" . | nindent 4 }}
+  annotations:
+    {{ .Values.annotations | toYaml | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "hubs-ce.selectorLabels" . | nindent 6 }}
+  minReadySeconds: 15
+  strategy:
+    {{- toYaml .Values.strategy | nindent 4 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "hubs-ce.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "hubs-ce.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          # ports:
+          #   - name: https-hubs
+          #     containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: https://localhost/healthz
+              port: 8080
+              scheme: HTTPS
+            initialDelaySeconds: 20
+            timeoutSeconds: 1
+            periodSeconds: 120
+          readinessProbe:
+            httpGet:
+              path: https://localhost/healthz
+              port: 8080
+              scheme: HTTPS
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env: 
+            - name: turkeyCfg_base_assets_path
+              value: https://assets.{{ .Values.global.domain }}/hubs/
+            - name: turkeyCfg_non_cors_proxy_domains
+              value: "{{ .Values.global.domain }},assets.{{ .Values.global.domain }}"
+            - name: turkeyCfg_reticulum_server
+              value: {{ .Values.global.domain }}
+            - name: turkeyCfg_cors_proxy_server
+              value: cors.{{ .Values.global.domain }}
+            - name: turkeyCfg_shortlink_domain
+              value: {{ .Values.global.domain }}
+            {{- toYaml .Values.env | nindent 12 }}
+            
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
