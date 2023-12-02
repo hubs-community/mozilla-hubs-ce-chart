@@ -36,7 +36,7 @@ spec:
     solvers:
       - http01:
           ingress:
-            class: nginx
+            class: haproxy
 ```
 
 ### Then run
