@@ -16,125 +16,8 @@ ports:
 annotations:
   cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
 
-strategy:
-  type: RollingUpdate
-  rollingUpdate:
-    maxUnavailable: 0
-    maxSurge: 1
-
-env:
-  - name: POD_IP
-    valueFrom:
-      fieldRef:
-        fieldPath: status.podIP
-  - name: POD_NAME
-    valueFrom:
-      fieldRef:
-        fieldPath: metadata.name
-  - name: turkeyCfg_POD_NS
-    valueFrom:
-      fieldRef:
-        fieldPath: metadata.namespace
-  - name: turkeyCfg_NODE_COOKIE
-    valueFrom:
-      secretKeyRef:
-        name: configs
-        key: NODE_COOKIE
-  - name: turkeyCfg_HUB_DOMAIN
-    valueFrom:
-      secretKeyRef:
-        name: configs
-        key: HUB_DOMAIN
-  - name: turkeyCfg_DOMAIN
-    valueFrom:
-      secretKeyRef:
-        name: configs
-        key: HUB_DOMAIN
-  - name: turkeyCfg_DB_USER
-    valueFrom:
-      secretKeyRef:
-        name: configs
-        key: DB_USER
-  - name: turkeyCfg_DB_PASS
-    valueFrom:
-      secretKeyRef:
-        name: configs
-        key: DB_PASS
-  - name: turkeyCfg_DB_NAME
-    valueFrom:
-      secretKeyRef:
-        name: configs
-        key: DB_NAME
-  - name: turkeyCfg_DB_HOST
-    valueFrom:
-      secretKeyRef:
-        name: configs
-        key: DB_HOST
-  - name: turkeyCfg_DB_HOST_T
-    valueFrom:
-      secretKeyRef:
-        name: configs
-        key: DB_HOST_T
-  - name: turkeyCfg_GUARDIAN_KEY
-    valueFrom:
-      secretKeyRef:
-        name: configs
-        key: GUARDIAN_KEY
-  - name: turkeyCfg_PERMS_KEY
-    valueFrom:
-      secretKeyRef:
-        name: configs
-        key: PERMS_KEY
-  - name: turkeyCfg_PHX_KEY
-    valueFrom:
-      secretKeyRef:
-        name: configs
-        key: PHX_KEY
-  - name: turkeyCfg_SMTP_SERVER
-    valueFrom:
-      secretKeyRef:
-        name: configs
-        key: SMTP_SERVER
-  - name: turkeyCfg_SMTP_PORT
-    valueFrom:
-      secretKeyRef:
-        name: configs
-        key: SMTP_PORT
-  - name: turkeyCfg_SMTP_USER
-    valueFrom:
-      secretKeyRef:
-        name: configs
-        key: SMTP_USER
-  - name: turkeyCfg_SMTP_PASS
-    valueFrom:
-      secretKeyRef:
-        name: configs
-        key: SMTP_PASS
-  - name: turkeyCfg_ADM_EMAIL
-    valueFrom:
-      secretKeyRef:
-        name: configs
-        key: ADM_EMAIL
-  - name: turkeyCfg_SKETCHFAB_API_KEY
-    valueFrom:
-      secretKeyRef:
-        name: configs
-        key: SKETCHFAB_API_KEY
-  - name: turkeyCfg_IMG_PROXY
-    value: nearspark.$Namespace
-  - name: turkeyCfg_TENOR_API_KEY
-    valueFrom:
-      secretKeyRef:
-        name: configs
-        key: TENOR_API_KEY
-  - name: turkeyCfg_YTDL_HOST
-    value: "https://hubs-ytdl-fsu7tyt32a-uc.a.run.app"
-  - name: turkeyCfg_PHOTOMNEMONIC
-    value: "https://photomnemonic-fsu7tyt32a-uc.a.run.app"
-  - name: turkeyCfg_SPEELYCAPTOR
-    value: "http://speelycaptor:5000"
-  - name: turkeyCfg_STORAGE_QUOTA_GB
-    value: "1000"
+# env:
+  
 
 revisionHistoryLimit: 1
 
@@ -177,7 +60,6 @@ ingress:
   #   haproxy.org/response-set-header: |
   #     access-control-allow-origin "https://{{ .Values.global.domain }}"
   #   haproxy.org/path-rewrite: /api-internal(.*) /_drop_
-
 
 resources:
   {}
@@ -326,9 +208,9 @@ config:
       speelycaptor_endpoint = "<SPEELYCAPTOR>"
 
       [ret."Elixir.Ret.PageOriginWarmer"]
-      hubs_page_origin = "https://hubs-ce.<POD_NS>:8080/hubs/pages"
+      hubs_page_origin = "https://hubs.<POD_NS>:8080/hubs/pages"
       spoke_page_origin = "https://spoke.<POD_NS>:8080/spoke/pages"
-      admin_page_origin = "https://hubs-ce.<POD_NS>:8080/hubs/pages"
+      admin_page_origin = "https://hubs.<POD_NS>:8080/hubs/pages"
       insecure_ssl = true
 
       [ret."Elixir.Ret.HttpUtils"]
@@ -433,9 +315,9 @@ volumeMounts:
 sidecar:
   enabled: true
   name: postgrest
-  image: mozillareality/postgrest 
+  image: mozillareality/postgrest
   ports:
-  - containerPort: 3000
+    - containerPort: 3000
   imagePullPolicy: IfNotPresent
   env:
     - name: PGRST_LOG_LEVEL

@@ -32,7 +32,7 @@ export SMTP_PASS="{YOUR_GMAIL_PASS}"
 
 export NODE_COOKIE="node-{YOUR_NODE_COOKIE_ID}"
 export GUARDIAN_KEY="{YOUR_GUARDIAN_KEY}"
-export PHX_KEY="kjadfkjlhasd"
+export PHX_KEY="{YOUR_PHX_KEY}"
 
 export SKETCHFAB_API_KEY="?"
 export TENOR_API_KEY="?"
@@ -43,13 +43,13 @@ export TENOR_API_KEY="?"
 
 ###
 openssl genpkey -algorithm RSA -out private_key.pem -pkeyopt rsa_keygen_bits:2048
-export PERMS_KEY="$(echo "$(awk '{printf "%s", $0}' private_key.pem)")" \n
+export PERMS_KEY="$(echo -n "$(awk '{printf "%s\\\\n", $0}' private_key.pem)")"
 openssl ec -pubout -in private_key.pem -out public_key.pem
 #sudo apt-get install npm && sudo npm install -g pem-jwk
 export PGRST_JWT_SECRET=$(pem-jwk public_key.pem)
 
 ### initial cert
-openssl req -x509 -newkey rsa:2048 -sha256 -days 36500 -nodes -keyout key.pem -out cert.pem -subj '/CN='$HUB_DOMAIN
+openssl req -x509 -newkey rsa:2048 -sha256 -days 36500 -nodes -keyout key.pem -out cert.pem -subj '/CN='$1
 export initCert=$(base64 -i cert.pem | tr -d '\n')
 export initKey=$(base64 -i key.pem | tr -d '\n')
 

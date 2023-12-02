@@ -38,9 +38,8 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          # ports:
-          #   - name: https-hubs
-          #     containerPort: 8080
+          ports:
+          - containerPort: 8080
           livenessProbe:
             httpGet:
               path: https://localhost/healthz

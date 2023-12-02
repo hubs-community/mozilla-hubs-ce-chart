@@ -24,7 +24,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "haproxy.serviceAccountName" . }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
@@ -37,7 +37,10 @@ spec:
             - --configmap={{ .Release.Namespace }}/haproxy-config
             - --configmap-tcp-services={{ .Release.Namespace }}/haproxy-tcp-config
             - --default-ssl-certificate={{ .Release.Namespace }}/cert-{{ .Values.global.domain }}
-            {{- toYaml .Values.args | nindent 12 }}
+            - --https-bind-port=4443
+            - --http-bind-port=8080
+            - --ingress.class=haproxy
+            - --log=warning #error warning info debug trace
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           # ports:
           #   - name: http
@@ -53,6 +56,16 @@ spec:
           #     port: 1042
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            {{- toYaml .Values.env | nindent 12 }}
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

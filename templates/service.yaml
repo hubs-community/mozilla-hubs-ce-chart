@@ -1,15 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "hubs-ce.fullname" . }}
+  name: hubs
   labels:
     {{- include "hubs-ce.labels" . | nindent 4 }}
+  annotations:
+    haproxy.org/server-ssl: "true"
 spec:
-  type: {{ .Values.service.type }}
+  clusterIP: None
   ports:
-    - name: https-hubs
-      port: {{ .Values.service.port }}
-      targetPort: {{ .Values.service.port }}
-      protocol: TCP
+  - name: https-hubs
+    port: 8080
+    targetPort: 8080
   selector:
     {{- include "hubs-ce.selectorLabels" . | nindent 4 }}

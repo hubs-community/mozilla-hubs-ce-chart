@@ -1,15 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "photomnemonic.fullname" . }}
+  name: {{ .Chart.Name }}
   labels:
     {{- include "photomnemonic.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
+    - port: 5000
+      targetPort: 5000
+      name: photomnemonic
   selector:
     {{- include "photomnemonic.selectorLabels" . | nindent 4 }}

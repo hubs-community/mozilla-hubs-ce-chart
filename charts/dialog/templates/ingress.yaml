@@ -11,10 +11,10 @@ metadata:
   name: {{ $fullName }}
   labels:
     {{- include "dialog.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
-  annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+  annotations: 
+    kubernetes.io/ingress.class: haproxy
+    haproxy.org/server-ssl: "true"
+    haproxy.org/load-balance: "url_param roomId"
 spec:
   tls:
     - hosts:

@@ -5,11 +5,10 @@ metadata:
   labels:
     {{- include "coturn.labels" . | nindent 4 }}
 spec:
-  {{- if .Values.service.type }}type: {{ .Values.service.type }}{{- end }}
-  {{- if .Values.service.spec }}{{ .Values.service.spec | toYaml | nindent 2 }}{{- end }}
+  # {{- if .Values.service.type }}type: {{ .Values.service.type }}{{- end }}
   ports:
-    - name: https-coturn
-      port: {{ .Values.service.port }}
-      targetPort: {{ .Values.service.port }}
+  - name: https-coturn
+    port: 5349
+    targetPort: 5349
   selector:
     {{- include "coturn.selectorLabels" . | nindent 4 }}

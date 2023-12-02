@@ -10,23 +10,9 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: "1.8.5@sha256:09b59bc272e3aec5ca5b706774ed788c4bb4f184bb1d7ab99660a2b7773b0668"
 
-args:
-  - --https-bind-port=4443
-  - --http-bind-port=8080
-  - --ingress.class=haproxy
-  - --log=warning #error warning info debug trace
-
 env:
   - name: TZ
     value: "Etc/UTC"
-  - name: POD_NAME
-    valueFrom:
-      fieldRef:
-        fieldPath: metadata.name
-  - name: POD_NAMESPACE
-    valueFrom:
-      fieldRef:
-        fieldPath: metadata.namespace
 
 imagePullSecrets: []
 nameOverride: ""

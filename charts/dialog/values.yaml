@@ -10,10 +10,6 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: "stable-latest"
 
-ports:        
-  - hostPort: 4443
-    containerPort: 4443
-
 env:
   - name: perms_key
     valueFrom:
@@ -61,10 +57,6 @@ service:
 
 ingress:
   enabled: true
-  annotations: 
-    kubernetes.io/ingress.class: haproxy
-    haproxy.org/server-ssl: "true"
-    haproxy.org/load-balance: "url_param roomId"
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

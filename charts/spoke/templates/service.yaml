@@ -1,15 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "spoke.fullname" . }}
+  name: {{ .Chart.Name }}
   labels:
     {{- include "spoke.labels" . | nindent 4 }}
+  annotations:
+    haproxy.org/server-ssl: "true"
 spec:
-  type: {{ .Values.service.type }}
+  clusterIP: None
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
+  - name: https-spoke
+    port: 8080
+    targetPort: 8080
   selector:
     {{- include "spoke.selectorLabels" . | nindent 4 }}

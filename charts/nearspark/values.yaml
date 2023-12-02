@@ -10,8 +10,6 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: "stable-latest"
 
-ports:
-  - containerPort: 5000
 
 annotations:
   cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
