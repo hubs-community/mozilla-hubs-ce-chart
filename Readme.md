@@ -11,8 +11,9 @@ See https://cert-manager.io/docs/installation/helm/ for more information
     helm repo update
     helm install cert-manager jetstack/cert-manager \
      --namespace security \
-     --set ingressShim.defaultIssuerName=letsencrypt-prod \
-     --set ingressShim.defaultIssuerKind=ClusterIssuer
+     --set ingressShim.defaultIssuerName=letsencrypt-issuer \
+     --set ingressShim.defaultIssuerKind=ClusterIssuer \
+     --set installCRDs=true
 ```
 
 ### Create cluster-issuer.yaml for Let's Encrypt
