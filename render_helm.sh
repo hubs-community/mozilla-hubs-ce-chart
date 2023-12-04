@@ -22,8 +22,8 @@ export DB_PASS="123456"
 export DB_NAME="retdb"
 export DB_HOST="pgbouncer"
 export DB_HOST_T="pgbouncer-t"
-export PGRST_DB_URI="postgres://$DB_USER:$DB_PASS@pgbouncer/$DB_NAME"
-export PSQL="postgres://$DB_USER:$DB_PASS@pgbouncer/$DB_NAME"
+export PGRST_DB_URI="postgres://$DB_USER:$DB_PASS@$DB_HOST/$DB_NAME"
+export PSQL="postgres://$DB_USER:$DB_PASS@$DB_HOST/$DB_NAME"
 
 export SMTP_SERVER="smtp.gmail.com"
 export SMTP_PORT="587"
@@ -72,8 +72,8 @@ ENV_OUTPUT+="   TENOR_API_KEY: $TENOR_API_KEY\n"
 ENV_OUTPUT+="   PERMS_KEY: '"$PERMS_KEY"'\n"
 ENV_OUTPUT+="   PGRST_JWT_SECRET: '"$PGRST_JWT_SECRET"'\n"
 
-ENV_OUTPUT+="---\n\ndefaultCert:\n    initCert: '$initCert'\n"
-ENV_OUTPUT+="   initKey: '$initKey'\n---\n"
+ENV_OUTPUT+="---\n\ndefaultCert:\n    tls.crt: '$initCert'\n"
+ENV_OUTPUT+="   tls.key: '$initKey'\n---\n"
 
 echo -e "$ENV_OUTPUT" > aconfig.yaml
 echo -e "Add to value.yaml:\n\n $ENV_OUTPUT"

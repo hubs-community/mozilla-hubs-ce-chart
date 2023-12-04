@@ -1,6 +1,9 @@
 # Welcome to the Mozilla Hubs Community Edition Chart!
 
-To start you need a kubernetes cluster with correct permissions setup.
+To start you need a kubernetes cluster. 
+Your worker nodes should have these ports open:
+* TCP: 80, 443, 4443, 5349
+* UDP: 35000 - 60000
 
 ## 1. Install cert-manager 
 See https://cert-manager.io/docs/installation/helm/ for more information
@@ -50,7 +53,7 @@ Copy and paste the configs.data output of render_helm.sh into the values.yaml fi
 ```
 ./render_helm.sh {YOUR_HUBS_DOMAIN} {ADMIN_EMAIL_ADDRESS}
 ```
-> you shouldn't need the default cert anymore but if you do the output is at the bottom of render_helm.sh output. You may turn on the default cert and replace the data if needed, your mileage may vary. 
+> You need the default cert to allow cert manager to request certs. 
 
 Modify the values.yaml with your domain and email, replace whats inside the string.
 
@@ -72,6 +75,9 @@ Then to finish up the install run
     
     helm install moz . --namespace={YOUR_NAMESPACE} --debug --dry-run
 ```
+### AWS Note
+> If installed on aws, open ec2 -> load balancer -> select the new lb -> copy dns A record
+> create cnames record with your dns of choice for each of the domain records for the hubs stack; stream,cors,assets,tld.
 
 ## Update this helm chart
 

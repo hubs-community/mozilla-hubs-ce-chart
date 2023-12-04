@@ -36,7 +36,7 @@ spec:
           args: 
             - --configmap={{ .Release.Namespace }}/haproxy-config
             - --configmap-tcp-services={{ .Release.Namespace }}/haproxy-tcp-config
-            - --default-ssl-certificate={{ .Release.Namespace }}/cert-{{ .Values.global.domain }}
+            - --default-ssl-certificate={{ .Release.Namespace }}/cert-hcce
             - --https-bind-port=4443
             - --http-bind-port=8080
             - --ingress.class=haproxy

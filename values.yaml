@@ -127,16 +127,8 @@ configs:
     PGRST_JWT_SECRET: "{run render_helm.sh}"
     
 defaultCert:
-  enabled: false
+  enabled: true
   name: cert-hcce
   data:
     tls.crt: "{run render_helm.sh}"
     tls.key: "{run render_helm.sh}"
-
-ns:
-  enabled: false
-  name: ns-hcce
-
-cert-manager: #defined by either the name or alias of your dependency in Chart.yaml
-  enabled: true
-  namespace: security

@@ -12,9 +12,6 @@ spec:
   commonName: {{ .Values.global.domain }}
   dnsNames:
     - {{ .Values.global.domain }}
-    - stream.{{ .Values.global.domain }}
-    - assets.{{ .Values.global.domain }}
-    - cors.{{ .Values.global.domain }}
 ---
 # cert-assets.{{ .Values.global.domain }}
 apiVersion: cert-manager.io/v1
