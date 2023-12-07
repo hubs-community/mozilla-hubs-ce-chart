@@ -16,29 +16,57 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.ingress.tls }}
+  # {{- if .Values.ingress.tls }}
+  # tls:
+  #   {{- range .Values.ingress.tls }}
+  #   - hosts:
+  #       {{- range .hosts }}
+  #       - {{ . | quote }}
+  #       {{- end }}
+  #     secretName: {{ .secretName }}
+  #   {{- end }}
+  # {{- end }}
+  # rules:
+  #   {{- range .Values.ingress.hosts }}
+  #   - host: {{ .host | quote }}
+  #     http:
+  #       paths:
+  #         {{- range .paths }}
+  #         - path: {{ . }}
+  #           pathType: ImplementationSpecific
+  #           backend:
+  #             service:
+  #               name: {{ $fullName }}
+  #               port: 
+  #                 number: {{ $svcPort }}
+  #         {{- end }}
+  #   {{- end }}
   tls:
-    {{- range .Values.ingress.tls }}
     - hosts:
-        {{- range .hosts }}
-        - {{ . | quote }}
-        {{- end }}
-      secretName: {{ .secretName }}
-    {{- end }}
-  {{- end }}
+        - assets.{{ .Values.global.domain }}
+      secretName: cert-assets.{{ .Values.global.domain }}
+    - hosts:
+        - cors.{{ .Values.global.domain }}
+      secretName: cert-cors.{{ .Values.global.domain }}
   rules:
-    {{- range .Values.ingress.hosts }}
-    - host: {{ .host | quote }}
+    - host: assets.{{ .Values.global.domain }}
       http:
         paths:
-          {{- range .paths }}
-          - path: {{ . }}
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: {{ $fullName }}
-                port: 
-                  number: {{ $svcPort }}
-          {{- end }}
-    {{- end }}
+        - path: /spoke
+          pathType: Prefix
+          backend:
+            service:
+              name: spoke
+              port: 
+                number: 8080
+    - host: cors.{{ .Values.global.domain }}
+      http:
+        paths:
+        - path: /spoke
+          pathType: Prefix
+          backend:
+            service:
+              name: spoke
+              port: 
+                number: 8080
   {{- end }}

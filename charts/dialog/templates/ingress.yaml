@@ -18,7 +18,7 @@ metadata:
 spec:
   tls:
     - hosts:
-      - stream.{{ .Values.global.domain }}
+        - stream.{{ .Values.global.domain }}
       secretName: cert-stream.{{ .Values.global.domain }}
   rules:
     - host: stream.{{ .Values.global.domain }}

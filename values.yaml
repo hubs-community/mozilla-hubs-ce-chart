@@ -66,9 +66,9 @@ service:
   port: 8080
 
 ingress:
-  enabled: false
+  enabled: true
   annotations:
-    {}
+    kubernetes.io/ingress.class: haproxy
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
 
@@ -97,6 +97,10 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+ns:
+  enabled: false
+  name: hcce
 
 configs:
   enabled: true

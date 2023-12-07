@@ -75,5 +75,6 @@ ENV_OUTPUT+="   PGRST_JWT_SECRET: '"$PGRST_JWT_SECRET"'\n"
 ENV_OUTPUT+="---\n\ndefaultCert:\n    tls.crt: '$initCert'\n"
 ENV_OUTPUT+="   tls.key: '$initKey'\n---\n"
 
-echo -e "$ENV_OUTPUT" > aconfig.yaml
+echo -e "$ENV_OUTPUT" >> config.yaml
 echo -e "Add to value.yaml:\n\n $ENV_OUTPUT"
+echo "./config.yaml generated"

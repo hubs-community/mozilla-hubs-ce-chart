@@ -1,1 +1,5 @@
 *.pem
+config.yaml
+values-*.yaml
+*.json
+aws*.yaml

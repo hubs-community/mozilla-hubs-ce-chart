@@ -59,20 +59,6 @@ spec:
               name: ret
               port: 
                 number: 4001
-        - path: /hubs
-          pathType: Prefix
-          backend:
-            service:
-              name: hubs
-              port: 
-                number: 8080
-        - path: /spoke
-          pathType: Prefix
-          backend:
-            service:
-              name: spoke
-              port: 
-                number: 8080
     - host: cors.{{ .Values.global.domain }}
       http:
         paths:
@@ -90,25 +76,4 @@ spec:
               name: ret
               port: 
                 number: 4001                  
-        - path: /hubs
-          pathType: Prefix
-          backend:
-            service:
-              name: hubs
-              port: 
-                number: 8080
-        - path: /spoke
-          pathType: Prefix
-          backend:
-            service:
-              name: spoke
-              port: 
-                number: 8080
-        - path: /nearspark
-          pathType: ImplementationSpecific
-          backend:
-            service:
-              name: nearspark
-              port: 
-                number: 5000
   {{- end }}
