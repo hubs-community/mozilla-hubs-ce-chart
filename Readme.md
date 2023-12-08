@@ -5,7 +5,10 @@ Your worker nodes should have these ports open:
 * TCP: 80, 443, 4443, 5349
 * UDP: 35000 - 60000
 
-## 1. Install cert-manager 
+
+## Setup SSL Certs
+We need a few ssl certs and cert manager allows us to automate the request but also the renewal of the certs. lets install it!
+### Install cert-manager 
 See https://cert-manager.io/docs/installation/helm/ for more information
 
 ```
@@ -42,58 +45,50 @@ spec:
             class: haproxy
 ```
 
-### Then run
+Then run
 ```
 kubectl apply -f 'PATH_TO/cluster-issuer.yaml'
 ```
 
-## 2. Install this helm chart
+## Deployment
+### Install this helm chart
 
 Copy and paste the configs.data output of render_helm.sh into the values.yaml file deleting .
 ```
 ./render_helm.sh {YOUR_HUBS_DOMAIN} {ADMIN_EMAIL_ADDRESS}
 ```
 > You need the default cert to allow cert manager to request certs. 
+> It will create a new file `config.yaml` 
 
 Modify the values.yaml with your domain and email, replace whats inside the string.
-
 ```
 global:
   domain: &HUBS_DOMAIN "{YOUR_HUBS_DOMAIN}"
   adminEmail: &ADMINEMAIL "{ADMIN_EMAIL_ADDRESS}"
 ```
 
-Then to finish up the install run
+Update the values.yaml to have your domain and email + need keys then to finish up the install run
+```
+git clone git@github.com:hubs-community/mozilla-hubs-ce-chart.git
+cd mozilla-hubs-ce-chart
+kubectl create ns {YOUR_NAMESPACE}
 
+helm install moz . --namespace={YOUR_NAMESPACE} --debug --dry-run
 ```
-    git clone git@github.com:hubs-community/mozilla-hubs-ce-chart.git
-    cd mozilla-hubs-ce-chart
-    kubectl create ns {YOUR_NAMESPACE}
-    
-    # update the values.yaml to have your domain and email + need keys
-    # remove --dry-run to fully install
-    
-    helm install moz . --namespace={YOUR_NAMESPACE} --debug --dry-run
-```
-### AWS Note
-> If installed on aws, open ec2 -> load balancer -> select the new lb -> copy dns A record
-> create cnames record with your dns of choice for each of the domain records for the hubs stack; stream,cors,assets,tld.
+> remove --dry-run to fully install
+
+> [AWS Deployment Notes](./Readme.aws.md)
 
 ## Update this helm chart
-
+Update what you need to, ie, values.yaml or template files. Remove --dry-run to upgrade
 ```
-    # update what you need to, ie, values.yaml or template files
-    # remove --dry-run to upgrade
-
-    helm upgrade moz . --namespace={YOUR_NAMESPACE} --debug --dry-run
+helm upgrade moz . --namespace={YOUR_NAMESPACE} --debug --dry-run
 ```
 
 ## Delete this helm chart
-
+This will remove everything installed by this chart. Remove --dry-run to delete
 ```
-    # This will remove everything installed by this chart
-    # remove --dry-run to delete
-
-    helm delete moz --namespace={YOUR_NAMESPACE} --dry-run
+helm delete moz --namespace={YOUR_NAMESPACE} --dry-run
 ```
+
 

@@ -38,8 +38,19 @@ spec:
       serviceAccountName: {{ include "reticulum.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      volumes: 
-        {{- toYaml .Values.volumes | nindent 8 }}
+      volumes:
+        - name: storage
+          {{- if .Values.global.aws.efs.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "reticulum.fullname" . }}-efs-claim
+          {{- else }}
+          hostPath:
+            path: /tmp/ret_storage_data
+            type: DirectoryOrCreate
+          {{- end }}
+        - name: config
+          configMap:
+            name: ret-config
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
