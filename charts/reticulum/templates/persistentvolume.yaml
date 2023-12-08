@@ -1,0 +1,17 @@
+{{- if .Values.global.aws.efs.enabled}}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "reticulum.fullname" . }}-efs-pv
+spec:
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  storageClassName: {{ .Release.Name }}-efs-storage-class
+  persistentVolumeReclaimPolicy: Retain
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: {{ .Values.global.aws.efs.fileSystemId }}
+{{- end}}

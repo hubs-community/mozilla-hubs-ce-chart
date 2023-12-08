@@ -9,7 +9,7 @@ global:
     alb:
       enabled: false
     efs:
-      enabled: false
+      enabled: true
       isDynamicProvisioning: false
       fileSystemId: fs-000000000000
 
