@@ -3,3 +3,4 @@ config.yaml
 values-*.yaml
 *.json
 aws*.yaml
+!default-aws-efs-csi-driver-trust-policy.json

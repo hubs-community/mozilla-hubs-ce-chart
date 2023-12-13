@@ -1,0 +1,18 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::{ACCOUNT-NUMBER}:oidc-provider/oidc.eks.{region-code}.amazonaws.com/id/0CXXXXXXXXXXXXXXXXXXXXX"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringLike": {
+          "oidc.eks.{region-code}.amazonaws.com/id/0CXXXXXXXXXXXXXXXXXXXXX:sub": "system:serviceaccount:kube-system:efs-csi-*",
+          "oidc.eks.{region-code}.amazonaws.com/id/0CXXXXXXXXXXXXXXXXXXXXX:aud": "sts.amazonaws.com"
+        }
+      }
+    }
+  ]
+}
