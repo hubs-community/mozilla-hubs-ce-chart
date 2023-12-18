@@ -67,10 +67,11 @@ global:
   adminEmail: &ADMINEMAIL "{ADMIN_EMAIL_ADDRESS}"
 ```
 
-Update the values.yaml to have your domain and email + need keys then to finish up the install run
+To finish up the install run:
 ```
 git clone git@github.com:hubs-community/mozilla-hubs-ce-chart.git
 cd mozilla-hubs-ce-chart
+
 kubectl create ns {YOUR_NAMESPACE}
 
 helm install moz . --namespace={YOUR_NAMESPACE} --debug --dry-run
