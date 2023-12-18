@@ -53,7 +53,7 @@ kubectl apply -f 'PATH_TO/cluster-issuer.yaml'
 ## Deployment
 ### Install this helm chart
 
-Copy and paste the configs.data output of render_helm.sh into the values.yaml file deleting .
+Copy and paste the configs.data output of render_helm.sh into the values.yaml file
 ```
 ./render_helm.sh {YOUR_HUBS_DOMAIN} {ADMIN_EMAIL_ADDRESS}
 ```
