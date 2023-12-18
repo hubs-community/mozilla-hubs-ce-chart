@@ -45,4 +45,4 @@ aws iam attach-role-policy \
 
 Now upgrade the values.yaml to enable efs and your good to go! (values.aws.yaml) 
 
-Reticulum and Postgres will use a Static PVC/PV with an EFS backend to share their storage directories across pods. Restarting ret should no longer cause data longer, but can't guaranty that. Use at your own risk!
+Reticulum and Postgres will use a Static PVC/PV with an EFS backend to share their storage directories across pods. Restarting ret should no longer cause data longer, but can't guarantee that. Use at your own risk!
