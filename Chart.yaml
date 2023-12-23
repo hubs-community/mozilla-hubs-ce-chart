@@ -26,3 +26,6 @@ maintainers:
   - name: Alex Griggs
     email: alex.griggs@gmail.com
 
+dependencies:
+  - name: pgsql
+    condition: pgsql.enabled
