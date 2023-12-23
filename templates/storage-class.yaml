@@ -10,4 +10,15 @@ parameters:
   fileSystemId: {{ .Values.global.aws.efs.fileSystemId }}
   directoryPerms: "700"
 {{- end}}
+{{- else if .Values.global.gcp.persistent.enabled}}
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ .Release.Name }}-filestore-storage-class
+provisioner: filestore.csi.storage.gke.io
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+parameters:
+  tier: standard
+  network: default
 {{- end}}

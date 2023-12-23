@@ -5,19 +5,20 @@
 global:
   domain: &HUBS_DOMAIN "{YOUR_HUBS_DOMAIN}"
   adminEmail: &ADMINEMAIL "{ADMIN_EMAIL_ADDRESS}"
-  aws:
-    efs:
-      enabled: true
-      isDynamicProvisioning: false
-      fileSystemId: fs-000000000000
   gcp: 
     persistent:
-      enabled: false
+      enabled: true
       storage: 50Gi
       volumeHandle: "modeInstance/FILESTORE_INSTANCE_LOCATION/FILESTORE_INSTANCE_NAME/FILESTORE_SHARE_NAME"
       volumeAttributes:
         ip: FILESTORE_INSTANCE_IP
         volumeName: FILESTORE_SHARE_NAME
+  aws:
+    efs:
+      enabled: false
+      isDynamicProvisioning: false
+      fileSystemId: fs-000000000000
+
 replicaCount: 1
 # namespace: hcce
 
