@@ -20,7 +20,7 @@ kind: PersistentVolume
 metadata:
   name: {{ include "reticulum.fullname" . }}-filestore-pv
 spec:
-  storageClassName: " {{ .Release.Name }}-filestore-storage-class"
+  storageClassName: {{ .Release.Name }}-filestore-storage-class
   capacity:
     storage: {{ .Values.global.gcp.persistent.storage }}
   accessModes:
