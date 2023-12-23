@@ -14,4 +14,23 @@ spec:
   csi:
     driver: efs.csi.aws.com
     volumeHandle: {{ .Values.global.aws.efs.fileSystemId }}
+{{- else if .Values.global.gcp.persistent.enabled}}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "reticulum.fullname" . }}-filestore-pv
+spec:
+  storageClassName: " {{ .Release.Name }}-filestore-storage-class"
+  capacity:
+    storage: {{ .Values.global.gcp.persistent.storage }}
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem
+  csi:
+    driver: filestore.csi.storage.gke.io
+    volumeHandle: {{ .Values.global.gcp.persistent.volumeHandle }}}
+    volumeAttributes:
+      ip: {{ .Values.global.gcp.persistent.volumeAttributes.ip }}}
+      volume: {{ .Values.global.gcp.persistent.volumeAttributes.volumeName }}}
 {{- end}}

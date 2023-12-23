@@ -10,5 +10,17 @@ spec:
   resources:
     requests:
       storage: 5Gi
-
+{{- else if .Values.global.gcp.persistent.enabled}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "reticulum.fullname" . }}-gcp-claim
+spec:
+  storageClassName: {{ .Release.Name }}-gcp-storage-class
+  accessModes:
+    - ReadWriteMany
+  storageClassName: {{ .Release.Name }}-filestore-storage-class
+  resources:
+    requests:
+      storage: {{ .Values.global.gcp.persistent.storage }}
 {{- end}}
