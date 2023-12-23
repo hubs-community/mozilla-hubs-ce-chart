@@ -6,8 +6,6 @@ global:
   domain: &HUBS_DOMAIN "{YOUR_HUBS_DOMAIN}"
   adminEmail: &ADMINEMAIL "{ADMIN_EMAIL_ADDRESS}"
   aws:
-    alb:
-      enabled: false
     efs:
       enabled: false
       isDynamicProvisioning: false
