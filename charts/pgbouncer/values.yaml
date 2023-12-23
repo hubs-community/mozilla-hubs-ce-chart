@@ -24,7 +24,10 @@ env:
         name: configs
         key: DB_PASS
   - name: DB_HOST
-    value: pgsql
+    valueFrom:
+      secretKeyRef:
+        name: configs
+        key: EXT_DB_HOST
 
 imagePullSecrets: []
 nameOverride: ""
