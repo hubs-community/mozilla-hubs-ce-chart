@@ -5,11 +5,6 @@
 global:
   domain: &HUBS_DOMAIN "{YOUR_HUBS_DOMAIN}"
   adminEmail: &ADMINEMAIL "{ADMIN_EMAIL_ADDRESS}"
-  aws:
-    efs:
-      enabled: true
-      isDynamicProvisioning: false
-      fileSystemId: fs-000000000000
 
 replicaCount: 1
 # namespace: hcce
@@ -71,29 +66,24 @@ service:
   port: 8080
 
 ingress:
-  enabled: true
+  enabled: false
   annotations:
-    kubernetes.io/ingress.class: haproxy
+    {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
 
 resources:
-  {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
 
 autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
@@ -102,10 +92,6 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
-ns:
-  enabled: false
-  name: hcce
 
 configs:
   enabled: true
@@ -136,8 +122,114 @@ configs:
     PGRST_JWT_SECRET: "{run render_helm.sh}"
     
 defaultCert:
-  enabled: true
+  enabled: false
   name: cert-hcce
   data:
     tls.crt: "{run render_helm.sh}"
     tls.key: "{run render_helm.sh}"
+
+ns:
+  enabled: false
+  name: ns-hcce
+
+cert-manager: #defined by either the name or alias of your dependency in Chart.yaml
+  enabled: true
+  namespace: security
+
+
+## Setup scale and resources for event!
+haproxy: 
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+dialog: 
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+reticulum: 
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+pgbouncer: 
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+pgbouncer-t: 
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+coturn: 
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
