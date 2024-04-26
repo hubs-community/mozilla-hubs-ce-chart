@@ -6,6 +6,6 @@ metadata:
   labels:
     {{- include "haproxy.labels" . | nindent 4 }}
 rules:
-  {{- toYaml .Values.clusterRole.rules | nindent 2 }}}
+  {{- toYaml .Values.clusterRole.rules | nindent 2 }}
 
-{{- end}}
+{{- end }}
