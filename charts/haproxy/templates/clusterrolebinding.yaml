@@ -13,4 +13,4 @@ subjects:
   - kind: ServiceAccount
     name: haproxy-sa
     namespace: {{ .Release.Namespace }}
-{{- end}}
+{{- end }}

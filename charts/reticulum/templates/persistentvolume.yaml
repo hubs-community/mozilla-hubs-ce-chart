@@ -29,8 +29,8 @@ spec:
   volumeMode: Filesystem
   csi:
     driver: filestore.csi.storage.gke.io
-    volumeHandle: {{ .Values.global.gcp.persistent.volumeHandle }}}
+    volumeHandle: {{ .Values.global.gcp.persistent.volumeHandle }}
     volumeAttributes:
-      ip: {{ .Values.global.gcp.persistent.volumeAttributes.ip }}}
-      volume: {{ .Values.global.gcp.persistent.volumeAttributes.volumeName }}}
+      ip: {{ .Values.global.gcp.persistent.volumeAttributes.ip }}
+      volume: {{ .Values.global.gcp.persistent.volumeAttributes.volumeName }}
 {{- end}}
