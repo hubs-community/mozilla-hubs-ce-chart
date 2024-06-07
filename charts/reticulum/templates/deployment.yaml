@@ -189,7 +189,7 @@ spec:
             - name: turkeyCfg_YTDL_HOST
               value: "https://hubs-ytdl-fsu7tyt32a-uc.a.run.app"
             - name: turkeyCfg_PHOTOMNEMONIC
-              value: "https://photomnemonic-fsu7tyt32a-uc.a.run.app"
+              value: "http://photomnemonic:5000"
             - name: turkeyCfg_SPEELYCAPTOR
               value: "http://speelycaptor:5000"
             - name: turkeyCfg_STORAGE_QUOTA_GB
