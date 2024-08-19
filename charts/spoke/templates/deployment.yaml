@@ -50,7 +50,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
             - name: turkeyCfg_thumbnail_server
-              value: nearspark.reticulum.io
+              value: cors.{{ .Values.global.domain }}/nearspark
             - name: turkeyCfg_base_assets_path
               value: https://assets.{{ .Values.global.domain }}/spoke/
             - name: turkeyCfg_non_cors_proxy_domains

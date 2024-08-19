@@ -41,7 +41,7 @@ certs:
 
 env:
   - name: turkeyCfg_thumbnail_server
-    value: nearspark.reticulum.io
+    value: cors.{{ .Values.global.domain }}/nearspark
   - name: turkeyCfg_tier
     value: p1
 
